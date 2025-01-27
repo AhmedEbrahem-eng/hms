@@ -1,0 +1,92 @@
+<odoo>
+	<data>
+		<record model="ir.actions.act_window" id="patient_action">
+			<field name="name">
+				HMSPatient
+			</field>
+			<field name="res_model">
+				hms.patient
+			</field>
+			<field name="view_mode">
+				tree,form,kanban
+			</field>
+		</record>
+		<record id="patient_tree_view" model="ir.ui.view">
+			<field name="name">
+				Patient
+			</field>
+			<field name="model">
+				hms.patient
+			</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="first_name" />
+					<field name="last_name" />
+					<field name="blood_type" />
+				</tree>
+			</field>
+		</record>
+		<record id="patient_form_view" model="ir.ui.view">
+			<field name="name">
+				Patient
+			</field>
+			<field name="model">
+				hms.patient
+			</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group string="important Info">
+							<group>
+								<field name="first_name" />
+								<field name="last_name" />
+								<field name="email" />
+								<field name="birth_date" />
+								<field name="department_id" domain="[('is_opened', '=', True)]" />
+								<field name="department_capacity" />
+								<field name="state" />
+							</group>
+						</group>
+						<group string="Manager" groups="hms.manager_group">
+							<field name="doctor_ids" attrs="{'readonly': [('department_id', '=', False)]}" />
+						</group>
+						<group string="Addition Info">
+							<field name="blood_type" />
+						</group>
+						<notebook>
+							<page string="Page 1">
+								<group>
+									<field name="age" />
+									<field name="history" attrs="{'invisible': [('age', '&lt;', 50)]}" />
+									<field name="pcr" />
+									<field name="cr_ratio" attrs="{'required': [('pcr', '=', True)]}" />
+								</group>
+							</page>
+							<page string="Page 2">
+								<group>
+									<field name="blood_type" />
+									<field name="image" />
+									<field name="address" />
+								</group>
+							</page>
+							<page string="log">
+								<group>
+									<field name="log_history_ids">
+										<tree>
+											<field name="id" />
+											<field name="description" />
+											<field name="create_uid" />
+											<field name="create_date" />
+										</tree>
+									</field>
+								</group>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<menuitem name="Patient Management" id="menu_patient" />
+		<menuitem name="Patient" id="new_patient" parent="menu_patient" action="patient_action" />
+	</data>
+</odoo>
